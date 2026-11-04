@@ -1,0 +1,20 @@
+\begin{table}[ht]
+\centering
+\footnotesize
+\caption{Daphnet AUROC / AUPRC on held-out patients, 5-fold patient-grouped cross-validation (mean $\pm$ std over folds). FoG prevalence is 10\%, the AUPRC of a random detector.}
+\label{tab:adaptation}
+\setlength{\tabcolsep}{3pt}
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{lcccc}
+\toprule
+Setting & CNN-1D & LSTM & GRU & Transformer \\
+\midrule
+Zero-shot (no target labels) & 0.395$\pm$0.220 / 0.114 & 0.549$\pm$0.235 / 0.123 & 0.641$\pm$0.199 / 0.155 & 0.687$\pm$0.128 / 0.163 \\
+Scratch, 2 patients & 0.714$\pm$0.123 / 0.238 & 0.351$\pm$0.256 / 0.104 & 0.548$\pm$0.255 / 0.195 & 0.696$\pm$0.153 / 0.215 \\
+Fine-tuned, 2 patients & 0.617$\pm$0.144 / 0.161 & 0.435$\pm$0.170 / 0.089 & 0.588$\pm$0.167 / 0.132 & 0.668$\pm$0.195 / 0.179 \\
+Scratch, 6 patients & 0.786$\pm$0.147 / 0.387 & 0.608$\pm$0.251 / 0.202 & 0.769$\pm$0.189 / 0.373 & 0.776$\pm$0.178 / 0.350 \\
+Fine-tuned, 6 patients & 0.727$\pm$0.175 / 0.302 & 0.437$\pm$0.173 / 0.099 & 0.700$\pm$0.201 / 0.223 & 0.732$\pm$0.225 / 0.300 \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\end{table}

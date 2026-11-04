@@ -1,0 +1,173 @@
+% Gemini theme, https://github.com/anishathalye/gemini
+\documentclass[final]{beamer}
+
+% ====================
+% Packages
+% ====================
+
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[size=custom,width=118.9,height=84.1,scale=1.15]{beamerposter}
+\usetheme{gemini}
+\usecolortheme{ENSA}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.14}
+\usepackage{anyfontsize}
+\usepackage{hyperref}
+\hypersetup{pdftitle={From Simulated Falls to Freezing of Gait: A Controlled Study of Domain Shift in Wearable Accelerometry},pdfauthor={Paul Christopher Aime}}
+\graphicspath{{../../results/figures/}}
+
+% ====================
+% Lengths
+% ====================
+
+\newlength{\sepwidth}
+\newlength{\colwidth}
+\setlength{\sepwidth}{0.025\paperwidth}
+\setlength{\colwidth}{0.3\paperwidth}
+
+\newcommand{\separatorcolumn}{\begin{column}{\sepwidth}\end{column}}
+
+% ====================
+% Title
+% ====================
+
+\title{From Simulated Falls to Freezing of Gait: A Controlled Study of Domain Shift in Wearable Accelerometry}
+
+\author{Paul Christopher Aim\'e \and Supervisor: Pr.\ Mustapha Ameur}
+
+\institute[shortinst]{\'Ecole Nationale des Sciences Appliqu\'ees de Marrakech, Cadi Ayyad University, Morocco}
+
+% ====================
+% Footer
+% ====================
+
+\footercontent{
+  Department of Computer Engineering \hfill
+  Code, notebooks and checkpoints: \texttt{parkinson-domain-shift} repository \hfill
+  \href{mailto:paulchristaimeslg3@gmail.com}{paulchristaimeslg3@gmail.com}}
+
+% ====================
+% Body
+% ====================
+
+\AtEndDocument{\directlua{pdf.setinfo('/Author (Paul Christopher Aime)')}}
+\begin{document}
+
+\begin{frame}[t]
+\hypersetup{pdfauthor={Paul Christopher Aime}}
+\begin{columns}[t]
+\separatorcolumn
+
+% ------------------------------------------------------------------ column 1
+\begin{column}{\colwidth}
+
+  \begin{block}{Question}
+    Wearable fall detectors are trained on healthy volunteers who simulate falls on mattresses.
+    Patients with Parkinson's disease rarely fall that way: many falls start with
+    \textbf{freezing of gait (FoG)}, a brief inability to step. We ask whether a deep fall
+    detector trained on \textbf{SisFall} (38 healthy subjects) can flag FoG in \textbf{Daphnet}
+    (10 Parkinson's patients) without any patient label, and if not, \emph{why not}.
+    \begin{itemize}
+      \item \textbf{covariate shift}: normal movement differs (age, pathology);
+      \item \textbf{concept shift}: the event to detect is a different phenomenon.
+    \end{itemize}
+  \end{block}
+
+  \begin{block}{A controlled comparison}
+    Sensor placement, units, labelling and training regime can all masquerade as ``domain shift''.
+    Each is removed by construction:
+    \begin{itemize}
+      \item one accelerometer at the same site (waist / lower trunk), rotated into a
+            vertical--antero-posterior--medio-lateral frame identified from the data;
+      \item both domains in $g$ at 64\,Hz (SisFall downsampled with anti-aliasing);
+      \item fall labels centred on the detected impact instead of the whole file;
+      \item identical seeds, mini-batches, loss, optimiser and tuning budget for all four models.
+    \end{itemize}
+    \begin{figure}
+      \centering
+      \includegraphics[width=\linewidth]{fig01_pipeline}
+    \end{figure}
+  \end{block}
+
+  \begin{block}{What changes between the domains}
+    \begin{figure}
+      \centering
+      \includegraphics[width=\linewidth]{fig06_window_descriptors}
+      \caption{A fall window peaks at $5.6\,g$. A FoG window differs from Parkinsonian walking by
+      only $0.2\,g$ in peak, twice the $|a|$ variability and more power in the 3--8\,Hz freeze band.}
+    \end{figure}
+  \end{block}
+
+\end{column}
+
+\separatorcolumn
+
+% ------------------------------------------------------------------ column 2
+\begin{column}{\colwidth}
+
+  \begin{block}{Models}
+    \input{poster_models}
+  \end{block}
+
+  \begin{alertblock}{Main result}
+    \input{poster_mainresult}
+  \end{alertblock}
+
+  \begin{block}{In-domain vs.\ zero-shot}
+    \begin{figure}
+      \centering
+      \includegraphics[width=\linewidth]{fig14_roc_pr_curves}
+      \caption{Seed-averaged ROC / PR curves. Left, centre: SisFall test subjects. Right: Daphnet.}
+    \end{figure}
+  \end{block}
+
+  \begin{block}{References}
+    \scriptsize
+    Sucerquia et al., SisFall, \emph{Sensors} 2017 \textbullet{}
+    B\"achlin et al., Daphnet, \emph{IEEE TITB} 2010 \textbullet{}
+    Moore et al., freeze index, \emph{J.\ Neurosci.\ Methods} 2008 \textbullet{}
+    Nie et al., PatchTST, ICLR 2023 \textbullet{}
+    Gulrajani \& Lopez-Paz, DomainBed, ICLR 2021 \textbullet{}
+    Ben-David et al., \emph{Machine Learning} 2010 \textbullet{}
+    Gretton et al., MMD, \emph{JMLR} 2012.
+  \end{block}
+
+\end{column}
+
+\separatorcolumn
+
+% ------------------------------------------------------------------ column 3
+\begin{column}{\colwidth}
+
+  \begin{block}{Why transfer fails}
+    \begin{figure}
+      \centering
+      \includegraphics[width=\linewidth]{fig21_shift_decomposition}
+    \end{figure}
+    \input{poster_shift}
+  \end{block}
+
+  \begin{block}{Where each model stands}
+    \begin{figure}
+      \centering
+      \includegraphics[width=\linewidth]{fig22_overview_auroc}
+    \end{figure}
+  \end{block}
+
+  \begin{block}{Take-aways}
+    \input{poster_takeaways}
+  \end{block}
+
+
+
+\end{column}
+
+\separatorcolumn
+\end{columns}
+\end{frame}
+
+\end{document}

@@ -1,0 +1,22 @@
+\begin{table}[ht]
+\centering
+\footnotesize
+\caption{Shift between SisFall ADL and Daphnet walking, in input space and in the embedding of each SisFall-trained model: squared MMD, AUROC of a linear domain probe, under source and domain normalisation; and cosine between the fall and FoG class-difference directions.}
+\label{tab:shift}
+\setlength{\tabcolsep}{4pt}
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{lccccc}
+\toprule
+ & \multicolumn{2}{c}{MMD$^2$} & \multicolumn{2}{c}{Domain probe AUROC} & \\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}
+Space & source st. & domain st. & source st. & domain st. & $\cos(\Delta_\mathcal{S},\Delta_\mathcal{T})$ \\
+\midrule
+Input statistics & 0.110 & 0.072 & 0.958 & 0.995 & +0.766 \\
+CNN-1D & 0.200 & 0.081 & 0.994 & 0.995 & +0.182 \\
+LSTM & 0.446 & 0.017 & 0.989 & 0.975 & +0.096 \\
+GRU & 0.097 & 0.074 & 0.993 & 0.981 & -0.030 \\
+Transformer & 0.128 & 0.024 & 0.976 & 0.962 & +0.122 \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\end{table}

@@ -1,0 +1,22 @@
+\begin{table}[ht]
+\centering
+\small
+\caption{Effect of SisFall pre-training on Daphnet AUROC: mean difference (fine-tuned $-$ scratch), folds improved out of five, and Wilcoxon signed-rank $p$ (five folds, so $p\ge0.0625$).}
+\label{tab:pretrain}
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{llrrrrr}
+\toprule
+Model & Budget & Scratch & Fine-tuned & $\Delta$ & Improved & $p$ \\
+\midrule
+CNN-1D & 2 patients & 0.714 & 0.617 & -0.097 & 1/5 & 0.312 \\
+CNN-1D & 6 patients & 0.786 & 0.727 & -0.059 & 1/5 & 0.125 \\
+LSTM & 2 patients & 0.351 & 0.435 & +0.083 & 3/5 & 0.438 \\
+LSTM & 6 patients & 0.608 & 0.437 & -0.171 & 1/5 & 0.125 \\
+GRU & 2 patients & 0.548 & 0.588 & +0.040 & 2/5 & 1.000 \\
+GRU & 6 patients & 0.769 & 0.700 & -0.070 & 1/5 & 0.125 \\
+Transformer & 2 patients & 0.696 & 0.668 & -0.028 & 2/5 & 0.625 \\
+Transformer & 6 patients & 0.776 & 0.732 & -0.044 & 1/5 & 0.125 \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\end{table}

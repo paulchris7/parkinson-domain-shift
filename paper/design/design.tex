@@ -1,0 +1,182 @@
+\chapter{Methodology}
+\label{ch:method}
+
+\section{Problem statement}
+\label{sec:problem}
+
+Let $\src$ be the source domain (SisFall) and $\tgt$ the target domain (Daphnet). Each sample is a
+window $x\in\mathbb{R}^{T\times C}$ of tri-axial acceleration and a binary label $y$. In $\src$,
+$y=1$ marks a window centred on a fall impact; in $\tgt$, $y=1$ marks a window in which the patient
+is freezing. Both labels describe a \emph{motor event that a monitoring system should flag}, which
+is the premise of the transfer question. We train $f_\theta$ on labelled samples from $\src$ only and
+evaluate it on $\tgt$ without updating $\theta$ (zero-shot transfer). Unlabelled target windows may
+be used to estimate input normalisation statistics, since such data are available in any deployment.
+
+The question is not only whether $f_\theta$ transfers, but \emph{why} it does or does not. We
+therefore separate three effects:
+\begin{itemize}
+  \item \textbf{covariate shift}: the distribution of normal movement differs ($p_\src(x\mid y{=}0)\neq p_\tgt(x\mid y{=}0)$), because of age, pathology and sensor placement;
+  \item \textbf{label shift}: the prevalence of positives differs (2.6\% of SisFall test windows, 10.0\% of Daphnet windows);
+  \item \textbf{concept shift}: the positive class itself is a different phenomenon ($p_\src(x\mid y{=}1)\neq p_\tgt(x\mid y{=}1)$, and the direction that separates the classes in $\src$ need not separate them in $\tgt$).
+\end{itemize}
+Threshold-free metrics (AUROC) are insensitive to label shift, so a drop in AUROC points to covariate or
+concept shift. Normalising the target inputs with target statistics removes first- and
+second-order covariate shift per channel; whatever remains after that is attributed to the
+representation or to the concept.
+
+\section{A common signal representation}
+\label{sec:representation}
+
+Every confounder that is not part of the scientific question is removed by construction
+(\Cref{fig:pipeline}).
+
+\paragraph{One sensor, one site.} SisFall carries two accelerometers and a gyroscope on the same
+waist board; Daphnet has accelerometers at the ankle, thigh and lower back. We keep the SisFall
+ADXL345 and the Daphnet trunk sensor. The two are both worn at the lower back/waist, so the
+anatomical site is matched. The second SisFall accelerometer is redundant, and the gyroscope has no
+counterpart in Daphnet.
+
+\paragraph{Units and rate.} SisFall counts are converted to $g$ with the datasheet factor
+$2\cdot 16/2^{13}$; Daphnet values (mg) are divided by 1000. SisFall is resampled from 200 to
+\SI{64}{\hertz} with a polyphase filter that includes anti-aliasing. We chose to downsample the source
+rather than upsample the target: interpolated samples carry no information and would have tripled
+the cost of every recurrent model.
+
+\paragraph{Anatomical frame.} Each accelerometer is rotated into a vertical (V), antero-posterior
+(AP), medio-lateral (ML) frame, and the magnitude $|a|$ is appended, giving $C=4$ channels. For
+SisFall the axes are identified from the data instead of a figure in the dataset paper: the
+vertical axis carries $\approx 1\,g$ of static acceleration during walking, and after a fall the
+subject lies still, so gravity ends up on the AP axis for forward and backward falls and on the ML
+axis for lateral ones. The sign convention makes each axis read $+1\,g$ when it points upwards, so a
+subject lying prone reads $a_{AP}\approx-1\,g$. Daphnet's trunk axes are documented as forward,
+vertical and lateral.
+
+\paragraph{Windows.} Windows last \SI{2}{\second} ($T=128$). Evaluation windows are cut on a \SI{1}{\second}
+grid (50\% overlap) in both domains. In Daphnet, samples annotated 0 (outside the protocol) and
+sensor dropouts (trunk reading exactly $(0,0,0)$\,mg) are removed, and windows are cut inside each
+contiguous valid segment only, so that no window joins two non-adjacent pieces of recording.
+
+\section{Event-level labels}
+\label{sec:labels}
+
+SisFall provides one label per file. Labelling every window of a fall file as ``fall'' marks the
+walking that precedes the fall and the lying that follows it as positives, and inflates the positive
+class to roughly a third of all windows. We locate the impact as the maximum of $|a|$ in each
+fall trial (ignoring the first and last second) and define the event interval $E=[t_p-1\,\mathrm{s},\,
+t_p+1\,\mathrm{s}]$. A window $w$ is
+\begin{equation}
+y(w)=\begin{cases}
+1 & \text{if } |w\cap E|\geq 1.5\,\mathrm{s},\\
+0 & \text{if } |w\cap E| = 0,\\
+\text{discarded} & \text{otherwise,}
+\end{cases}
+\end{equation}
+so a positive window always contains the impact with at least half a second of context on each
+side, and partially overlapping windows are left out rather than forced into either class. In the
+training set only, fall windows are also cut on a \SI{0.25}{\second} grid, which shows the network each
+impact at four temporal offsets; validation and test sets keep the \SI{1}{\second} grid. A Daphnet window
+is positive when at least half of its samples are annotated as freezing.
+
+\section{Robust, domain-independent scaling}
+\label{sec:scaling}
+
+Each channel is standardised as $(x-\mathrm{median})/\mathrm{IQR}$. Fall impacts reach several $g$
+while most data sit near $1\,g$, so mean and standard deviation would be dominated by a small number
+of windows; median and inter-quartile range are not. Source statistics are fitted on the SisFall
+training subjects only. For the target we compare three options, all label-free:
+\begin{enumerate}
+  \item \emph{source statistics}: Daphnet scaled with the SisFall training statistics (naive deployment);
+  \item \emph{domain statistics}: statistics fitted on all Daphnet windows, independently of SisFall (default);
+  \item \emph{subject statistics}: statistics fitted on each patient separately, a simple form of test-time adaptation.
+\end{enumerate}
+
+\section{Architectures}
+\label{sec:arch}
+
+All four models map a window $x\in\mathbb{R}^{128\times 4}$ to one logit and expose an embedding
+(the input of the final linear layer) used in the shift analysis. Their sizes are tuned with the
+same budget (\Cref{sec:hpo}); the selected configurations are listed in \Cref{tab:hparams}.
+
+\paragraph{CNN-1D.} Three convolutional blocks (convolution, batch normalisation, ReLU), with channel
+widths $w,2w,4w$ and kernels narrowing with depth, max-pooling between blocks, global average pooling
+and dropout. Global pooling makes the detector indifferent to where in the window the event occurs.
+
+\paragraph{LSTM and GRU.} One or two stacked recurrent layers, optionally bidirectional. The
+embedding concatenates the last hidden state with the temporal mean of all hidden states, which
+protects against an event early in the window being partly forgotten by the time the sequence ends.
+
+\paragraph{Patch Transformer.} The window is split into non-overlapping patches of $P$ samples
+($P\in\{8,16\}$); each patch of all four channels is linearly projected to $d$ dimensions, a learnable
+\texttt{[CLS]} token and learned positional embeddings are added, and the sequence goes through $L$
+pre-norm encoder layers with four attention heads and GELU feed-forward blocks
+\parencite{vaswani2017attention,nie2023patchtst}. The \texttt{[CLS]} output feeds the classifier.
+
+\section{Training protocol and fairness}
+\label{sec:training}
+
+For a given seed, every architecture sees the same training windows, in the same mini-batch order,
+with the same augmentation draws, because shuffling and augmentation use one seeded generator.
+\begin{itemize}
+  \item Loss: binary cross-entropy with positive-class weight $n_{\mathrm{neg}}/n_{\mathrm{pos}}$.
+  \item Optimiser: AdamW \parencite{loshchilov2019adamw}, weight decay $10^{-4}$, batch size 256, one warm-up epoch followed by cosine decay, gradient clipping at 1.0.
+  \item At most 15 epochs; the checkpoint with the lowest (unweighted) SisFall validation cross-entropy is kept, with a patience of 4 epochs. Validation AUPRC saturates at 1.0 after two or three epochs and can no longer rank checkpoints (\Cref{sec:selection}).
+  \item Augmentation, in physical units before scaling: rotation about the vertical axis ($\pm20^\circ$), random ML sign flip, amplitude scaling (0.9--1.1) and Gaussian jitter (\SI{0.01}{g}) \parencite{um2017augmentation}. These mimic belt-mounting differences, not pathology.
+  \item Decision threshold: the value that maximises $F_2$ on SisFall validation, reused unchanged on the SisFall test subjects and on Daphnet. $F_2$ weighs recall four times more than precision, reflecting the clinical cost of a missed event.
+  \item Seeds 0, 1 and 2; results are reported as mean $\pm$ standard deviation.
+\end{itemize}
+
+\section{Hyper-parameter search}
+\label{sec:hpo}
+
+Each architecture receives six configurations sampled at random from its own search space
+(\Cref{tab:space}), trained for at most five epochs (patience 2) on the same training subset (all fall
+windows and a fixed half of the non-fall windows). Configurations are ranked by SisFall validation
+AUPRC rounded to three decimals, with ties broken by the validation cross-entropy. The Daphnet AUROC of
+every configuration is logged but \emph{not} used for selection; it only serves to report the
+gain an oracle with access to target labels would obtain \parencite{gulrajani2021domainbed}.
+
+\begin{table}[ht]
+\centering
+\small
+\caption{Hyper-parameter search spaces (six random draws per architecture).}
+\label{tab:space}
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{ll}
+\toprule
+Architecture & Search space \\
+\midrule
+CNN-1D & width $w\in\{16,32,48\}$, kernel $\in\{5,7,9\}$, dropout $\in\{0.1,0.3,0.5\}$ \\
+LSTM / GRU & hidden $\in\{32,64,96\}$, layers $\in\{1,2\}$, dropout $\in\{0.1,0.3\}$, bidirectional $\in\{$no, yes$\}$ \\
+Transformer & $d\in\{32,64,96\}$, layers $\in\{2,3,4\}$, patch $\in\{8,16\}$, dropout $\in\{0.1,0.2\}$ \\
+All & learning rate $\in\{5\cdot10^{-4},10^{-3},3\cdot10^{-3}\}$ \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\end{table}
+
+\section{Evaluation}
+\label{sec:evaluation}
+
+\paragraph{Metrics.} AUROC and AUPRC (threshold-free; AUPRC is more informative under class imbalance
+\parencite{saito2015prc}); at the validation threshold: recall (sensitivity), specificity, false-positive
+rate, precision, $F_1$, $F_2$ and balanced accuracy; and recall at 10\% false-positive rate. For the
+seed-averaged scores, 95\% confidence intervals on AUROC come from a cluster bootstrap that resamples
+\emph{subjects}, since windows from one person are not independent.
+
+\paragraph{Experiments.}
+\begin{enumerate}
+  \item[E1] In-domain fall detection on eight unseen SisFall subjects.
+  \item[E2] Zero-shot transfer to all Daphnet recordings, under the three target normalisations.
+  \item[E3] Target-domain references with 5-fold patient-grouped cross-validation on Daphnet: training
+  from scratch and fine-tuning from the SisFall weights (learning rate $\times0.3$), with six or two
+  training patients (the two with the most FoG windows), same training protocol as above. For fold
+  $k$, the validation patients (checkpoint selection, threshold) are those of fold $k{+}1$. The
+  patients are paired so that every test fold contains FoG: \{S01, S04\}, \{S02, S10\}, \{S03, S05\},
+  \{S06, S07\}, \{S08, S09\}.
+  \item[E4] Shift analysis on the penultimate-layer embeddings of the SisFall models: squared MMD with an
+  RBF kernel \parencite{gretton2012mmd}, the AUROC of a linear domain probe, t-SNE
+  \parencite{vandermaaten2008tsne}, and the cosine between the class-difference vectors
+  $\Delta_\src=\mu_{\mathrm{fall}}-\mu_{\mathrm{ADL}}$ and $\Delta_\tgt=\mu_{\mathrm{FoG}}-\mu_{\mathrm{walk}}$.
+  A negative or near-zero cosine means the direction that the network uses to flag falls does not
+  point towards freezing: a direct, representation-level signature of concept shift.
+\end{enumerate}

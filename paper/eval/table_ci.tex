@@ -1,0 +1,18 @@
+\begin{table}[ht]
+\centering
+\small
+\caption{AUROC of the seed-averaged scores with 95\% subject-level bootstrap intervals.}
+\label{tab:ci}
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{lcc}
+\toprule
+Model & SisFall test & Daphnet zero-shot \\
+\midrule
+CNN-1D & 0.985 [0.961, 1.000] & 0.473 [0.407, 0.546] \\
+LSTM & 1.000 [0.999, 1.000] & 0.581 [0.381, 0.711] \\
+GRU & 0.999 [0.998, 1.000] & 0.639 [0.458, 0.765] \\
+Transformer & 0.999 [0.997, 1.000] & 0.650 [0.548, 0.733] \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\end{table}

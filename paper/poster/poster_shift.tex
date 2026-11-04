@@ -1,0 +1,10 @@
+\begin{itemize}
+  \item \textbf{Covariate shift persists.} A linear probe separates healthy ADL from Parkinsonian walking in every
+        embedding (AUROC 0.96--0.995). Re-normalising Daphnet changes zero-shot AUROC by at most
+        $\pm$0.13, with no consistent gain.
+  \item \textbf{Concept shift dominates.} In raw statistics, FoG and falls both mean ``more movement''
+        ($\cos = 0.77$). In the learned embeddings the fall direction is nearly orthogonal to the FoG
+        direction ($\cos = -0.03$ to $0.18$): the networks learned impacts, not agitation.
+  \item \textbf{Negative transfer.} Fine-tuning from fall weights is worse than training from scratch
+        for all four models with 6 labelled patients (AUROC $-0.04$ to $-0.17$).
+\end{itemize}

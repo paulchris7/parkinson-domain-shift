@@ -1,0 +1,10 @@
+comparison,descriptor,median A,median B,effect r (rank-biserial),p
+SisFall ADL vs SisFall fall,|a| std (g),0.054955184,0.7143797,0.81811786,0.0
+SisFall ADL vs SisFall fall,peak |a| (g),1.1785026,5.575004,0.9429363,0.0
+SisFall ADL vs SisFall fall,freeze index (log10),-0.33771753,-0.27269393,0.08600545,2.4824509e-08
+Daphnet walk vs Daphnet FoG,|a| std (g),0.046594623,0.104231685,0.37096655,0.0
+Daphnet walk vs Daphnet FoG,peak |a| (g),1.1715368,1.3894837,0.33531755,0.0
+Daphnet walk vs Daphnet FoG,freeze index (log10),0.07679303,0.3811532,0.32722646,0.0
+SisFall ADL vs Daphnet walk,|a| std (g),0.054955184,0.046594623,-0.04487729,2.0694953e-05
+SisFall ADL vs Daphnet walk,peak |a| (g),1.1785026,1.1715368,0.0057053566,0.58834887
+SisFall ADL vs Daphnet walk,freeze index (log10),-0.33771753,0.07679303,0.42174798,0.0

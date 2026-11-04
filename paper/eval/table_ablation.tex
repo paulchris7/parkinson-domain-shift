@@ -1,0 +1,18 @@
+\begin{table}[ht]
+\centering
+\footnotesize
+\caption{Zero-shot Daphnet results under three label-free normalisations of the target inputs: AUROC (mean $\pm$ std over seeds) and, in brackets, recall / false-positive rate at the SisFall threshold.}
+\label{tab:ablation}
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{lccc}
+\toprule
+Model & Source statistics & Domain statistics & Subject statistics \\
+\midrule
+CNN-1D & 0.621 $\pm$ 0.064 (0.0\% / 0.2\%) & 0.491 $\pm$ 0.056 (0.9\% / 0.6\%) & 0.528 $\pm$ 0.042 (0.8\% / 2.0\%) \\
+LSTM & 0.547 $\pm$ 0.064 (0.0\% / 0.1\%) & 0.587 $\pm$ 0.032 (0.1\% / 0.4\%) & 0.554 $\pm$ 0.031 (0.0\% / 0.4\%) \\
+GRU & 0.571 $\pm$ 0.051 (0.0\% / 0.1\%) & 0.631 $\pm$ 0.042 (0.0\% / 0.3\%) & 0.604 $\pm$ 0.027 (0.0\% / 0.3\%) \\
+Transformer & 0.603 $\pm$ 0.087 (0.0\% / 0.0\%) & 0.620 $\pm$ 0.036 (0.0\% / 0.5\%) & 0.596 $\pm$ 0.054 (0.0\% / 0.7\%) \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\end{table}

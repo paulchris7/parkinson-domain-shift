@@ -1,0 +1,18 @@
+\begin{table}[ht]
+\centering
+\small
+\caption{Configurations selected on SisFall validation, trainable parameters, mean epochs to the selected checkpoint and training time per epoch on one NVIDIA T4 GPU.}
+\label{tab:hparams}
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{lp{6.3cm}rrrr}
+\toprule
+Model & Configuration & lr & Params & Best ep. & s/epoch \\
+\midrule
+CNN-1D & width 32, kernel 7, dropout 0.5 & 3e-3 & 36,289 & 5.7 & 2 \\
+LSTM & hidden 64, 2 layers, bidirectional, dropout 0.3 & 1e-3 & 135,425 & 8.0 & 4 \\
+GRU & hidden 32, 2 layers, bidirectional, dropout 0.1 & 3e-3 & 26,241 & 9.7 & 2 \\
+Transformer & $d=64$, 2 layers, patch 8, dropout 0.2 & 3e-3 & 70,401 & 7.3 & 3 \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\end{table}

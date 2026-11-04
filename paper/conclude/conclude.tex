@@ -1,0 +1,50 @@
+\chapter{Conclusion}
+\label{ch:conclusion}
+
+\section{Summary}
+
+This study asked whether a deep fall detector trained on healthy volunteers can recognise freezing of
+gait in people with Parkinson's disease, and why it cannot. With the confounders removed by
+construction, the answers to the four research questions are as follows.
+
+\textbf{RQ1.} On unseen SisFall subjects, CNN-1D, LSTM, GRU and patch Transformer are all excellent
+(AUROC 0.988--0.999, 0.7--1.5 false alarms per hour). The recurrent models are marginally ahead,
+but no ranking is supported by the subject-level uncertainty. With impact-centred labels, simulated fall
+detection is essentially a solved problem, so it is a poor benchmark for choosing an architecture.
+
+\textbf{RQ2.} Zero-shot, the detectors rank FoG only slightly above walking (AUROC 0.49--0.63; 0.65 for the
+Transformer seed ensemble, the only interval that excludes chance), and at their validated operating
+point they detect essentially no freezing episode while raising 12--23 false alarms per hour of
+Parkinsonian walking. A single-line freeze index outperforms all of them.
+
+\textbf{RQ3.} The gap is mostly concept shift. Label-free normalisation reduces the distance between
+domains without making them indistinguishable and without improving transfer, and the direction that
+the networks use to flag falls is nearly orthogonal to the one that separates FoG from walking.
+
+\textbf{RQ4.} When patients are labelled, fall pre-training is a worse initialisation than random
+weights. Trained from scratch on six patients with a trunk sensor, the models reach an AUROC of about
+0.78, with the CNN-1D and the Transformer the most data-efficient.
+
+The practical lesson is simple: a monitoring system for Parkinson's disease cannot inherit its notion
+of ``abnormal'' from simulated falls. A model that is near-perfect on the source domain can be blind
+to the target event, and nothing measured on the source domain warns about it.
+
+\section{Perspectives}
+
+\paragraph{Event-agnostic pre-training.} Fall supervision teaches impact detectors. Self-supervised
+objectives on large unlabelled wearable corpora (contrastive or masked reconstruction,
+\cite{eldele2021tstcc}) learn representations of movement itself, including the rhythmic structure that
+FoG disrupts, and are a better candidate for transfer.
+
+\paragraph{Physics as an inductive bias.} The freeze index beat every network without training. Feeding
+spectral features in the locomotion and freeze bands to the models, or constraining the first layers to
+behave like band-pass filters, could combine the robustness of the physical prior with the capacity of
+learned models.
+
+\paragraph{Personalisation.} Per-patient AUROC varied from 0.26 to 0.85, and zero-shot rankings even
+reversed between patients. Few-shot adaptation from a handful of annotated episodes per patient, or
+test-time adaptation of normalisation layers \parencite{li2017adabn}, is a natural next step.
+
+\paragraph{Better targets.} Daphnet is small and was recorded in a laboratory protocol designed to
+provoke freezing. Larger home-recorded cohorts with both FoG and real falls, and sensors at the shank as
+well as the trunk, would make it possible to test whether the conclusions hold outside this setting.

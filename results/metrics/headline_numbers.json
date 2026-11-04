@@ -1,0 +1,90 @@
+{
+  "sisfall_auroc": {
+    "CNN-1D": 0.9875,
+    "GRU": 0.9993,
+    "LSTM": 0.9994,
+    "Transformer": 0.9979
+  },
+  "sisfall_recall": {
+    "CNN-1D": 0.9799,
+    "GRU": 0.9773,
+    "LSTM": 0.9773,
+    "Transformer": 0.9589
+  },
+  "sisfall_fa_per_hour": {
+    "CNN-1D": 1.52,
+    "GRU": 0.68,
+    "LSTM": 0.76,
+    "Transformer": 0.93
+  },
+  "daphnet_auroc_domain": {
+    "CNN-1D": 0.491,
+    "GRU": 0.631,
+    "LSTM": 0.5874,
+    "Transformer": 0.6197
+  },
+  "daphnet_recall_domain": {
+    "CNN-1D": 0.0092,
+    "GRU": 0.0,
+    "LSTM": 0.0006,
+    "Transformer": 0.0002
+  },
+  "daphnet_fpr_domain": {
+    "CNN-1D": 0.0065,
+    "GRU": 0.0033,
+    "LSTM": 0.0038,
+    "Transformer": 0.0047
+  },
+  "daphnet_auroc_by_norm": {
+    "source statistics": {
+      "CNN-1D": 0.621,
+      "GRU": 0.5712,
+      "LSTM": 0.5469,
+      "Transformer": 0.6028
+    },
+    "domain statistics": {
+      "CNN-1D": 0.491,
+      "GRU": 0.631,
+      "LSTM": 0.5874,
+      "Transformer": 0.6197
+    },
+    "subject statistics": {
+      "CNN-1D": 0.5277,
+      "GRU": 0.6042,
+      "LSTM": 0.5542,
+      "Transformer": 0.5963
+    }
+  },
+  "target_auroc": {
+    "zero-shot": {
+      "CNN-1D": 0.3951,
+      "GRU": 0.6408,
+      "LSTM": 0.5488,
+      "Transformer": 0.6873
+    },
+    "scratch \u00b7 2 patients": {
+      "CNN-1D": 0.7139,
+      "GRU": 0.5478,
+      "LSTM": 0.3514,
+      "Transformer": 0.6957
+    },
+    "SisFall pre-trained \u00b7 2 patients": {
+      "CNN-1D": 0.6167,
+      "GRU": 0.5879,
+      "LSTM": 0.4346,
+      "Transformer": 0.6677
+    },
+    "scratch \u00b7 6 patients": {
+      "CNN-1D": 0.7857,
+      "GRU": 0.7694,
+      "LSTM": 0.6081,
+      "Transformer": 0.7759
+    },
+    "SisFall pre-trained \u00b7 6 patients": {
+      "CNN-1D": 0.7265,
+      "GRU": 0.6996,
+      "LSTM": 0.4367,
+      "Transformer": 0.7324
+    }
+  }
+}

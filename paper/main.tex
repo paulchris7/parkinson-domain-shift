@@ -1,0 +1,61 @@
+%%%%%%%%%%%% MAIN PACKAGES %%%%%%%%%%%%
+\documentclass{template}
+\usepackage{graphicx,parskip,appendix,float}
+\usepackage[ruled,vlined]{algorithm2e}
+\usepackage{url,amsmath,amssymb,listings,caption,subcaption,multicol,booktabs,multirow,siunitx,xcolor}
+\usepackage{csquotes}
+\usepackage[style=authoryear,giveninits,backend=biber,maxcitenames=2,uniquelist=false,dashed=false,useprefix=true]{biblatex}
+\addbibresource{references.bib}
+\usepackage[pagebackref=false,pdffitwindow=true]{hyperref}
+\usepackage{cleveref}
+\usepackage{adjustbox}
+
+\hypersetup{
+    pdftitle    = {From Simulated Falls to Freezing of Gait: A Controlled Study of Domain Shift in Wearable Accelerometry},
+    pdfauthor   = {Paul Christopher Aime},
+    pdfsubject  = {Domain shift, wearable sensing, Parkinson's disease},
+    pdfkeywords = {domain shift, fall detection, freezing of gait, Parkinson's disease, transformer, LSTM, GRU, CNN},
+    colorlinks  = true, anchorcolor = blue, filecolor = blue, urlcolor = blue,
+    linkcolor   = ensablue, citecolor = ensablue,
+}
+
+\sisetup{detect-all, separate-uncertainty=true, table-format=1.3}
+\graphicspath{{../results/figures/}{figures/}}
+\DeclareGraphicsExtensions{.pdf,.png,.jpg}
+
+\newtheorem{Definition}{Definition}
+\newcommand{\src}{\mathcal{S}}
+\newcommand{\tgt}{\mathcal{T}}
+\newcommand{\E}{\mathbb{E}}
+
+\sloppy
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+\title{From Simulated Falls to Freezing of Gait:\\ A Controlled Study of Domain Shift in Wearable Accelerometry}
+\subtitle{Comparing CNN-1D, LSTM, GRU and a Patch Transformer under zero-shot transfer from SisFall to Daphnet}
+\author{Paul Christopher Aim\'e}
+\degreetitle{State Engineer in Computer Engineering (G\'enie Informatique)}
+\rpttype{research}
+\principaladviser{Pr.\ Mustapha Ameur}
+\academicyear{2025--2026}
+\submitdate{June 2026}
+
+\include{intro/abstract}
+
+\include{intro/introduction}
+\include{background/background}
+\include{design/design}
+\include{impl/implementation}
+\include{eval/evaluation}
+\include{conclude/conclude}
+
+\footnotesize
+\printbibliography[heading=bibintoc,title={References}]
+\normalsize
+
+\appendix
+\include{appendix/appendix}
+
+\end{document}

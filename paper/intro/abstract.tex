@@ -1,0 +1,34 @@
+\beforeabstract
+\prefacesection{Abstract}
+
+Wearable fall detectors are trained almost exclusively on falls simulated by healthy volunteers,
+yet they are meant for people whose movement, and whose falls, look different. We study the most
+extreme version of that mismatch: a deep fall detector trained on the SisFall dataset (38 healthy
+young and elderly subjects) and applied, without any patient label, to freezing of gait (FoG) in the
+Daphnet dataset (10 patients with Parkinson's disease). The comparison is controlled: one accelerometer at the same anatomical site in both domains, rotated
+into a common vertical/antero-posterior/medio-lateral frame identified from the data; both domains in
+$g$ at \SI{64}{\hertz}; fall labels centred on the detected impact; and identical seeds, mini-batches,
+loss, optimiser and tuning budget for a CNN-1D, an LSTM, a GRU and a patch-based Transformer.
+In-domain, the four models are almost indistinguishable (AUROC 0.988--0.999, recall 0.96--0.98,
+0.7--1.5 false alarms per hour on unseen subjects). Under zero-shot transfer, AUROC drops to
+0.49--0.63; only the Transformer's subject-level confidence interval excludes chance. At their validated
+thresholds the detectors stay silent on FoG (recall below 1\%) while false alarms on walking rise 15- to
+18-fold. A training-free freeze index ranks FoG better (AUROC 0.66) than every network. Label-free
+re-normalisation of the target inputs gives no consistent gain. In every learned embedding, a linear
+probe still separates healthy from Parkinsonian movement (AUROC $\geq$ 0.96), and the fall direction
+is nearly orthogonal to the FoG direction. Fine-tuning from fall weights is worse than training from
+scratch in six of eight comparisons. The transfer gap is therefore dominated by concept shift rather
+than covariate shift, and in-domain accuracy gives no indication of transferability.
+
+\textbf{Keywords:} domain shift, fall detection, freezing of gait, Parkinson's disease, wearable
+sensors, Transformer, recurrent neural networks.
+
+\prefacesection{Acknowledgements}
+
+This work grew out of a group project carried out at ENSA Marrakech with Rokhaya Gueye and Agrhib
+Azar, whom I thank for their collaboration and discussions.
+I thank Pr.\ Mustapha Ameur for supervising the project. The SisFall dataset was made available by the
+SISTEMIC group of the Universidad de Antioquia, and the Daphnet dataset by the DAPHNet project and the
+Tel Aviv Sourasky Medical Center.
+
+\afterpreface \afterabstract

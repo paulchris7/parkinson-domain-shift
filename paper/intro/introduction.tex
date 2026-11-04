@@ -1,0 +1,67 @@
+\chapter{Introduction}
+\label{ch:intro}
+
+Parkinson's disease is the fastest-growing neurological disorder worldwide, and falls are among its
+most damaging consequences \parencite{gbd2024nervous,bloem2021parkinson}. Most people with the disease
+fall at least once a year, and a large share fall repeatedly \parencite{allen2013falls}. Many of these
+falls are linked to \emph{freezing of gait} (FoG): short episodes in which the feet seem glued to the
+floor despite the intention to walk, typically when turning, starting to walk or passing through a
+doorway \parencite{nutt2011fog}. A wearable sensor that recognised such episodes, or the falls that
+follow them, could trigger cueing or call for help.
+
+Deep learning on inertial signals has made fall detection look easy. On public benchmarks, recurrent
+and convolutional networks routinely report sensitivities and specificities above 95\%
+\parencite{musci2021online,wang2019survey}. These benchmarks, however, are built from falls simulated by
+young, healthy volunteers onto mattresses \parencite{sucerquia2017sisfall,casilari2017datasets}, and
+accuracy on real falls of older people is known to be much lower \parencite{bagala2012realfalls}. Patients
+with Parkinson's disease add another layer: their normal gait already differs from that of healthy
+volunteers, and the events that matter clinically, such as freezing, do not look like the falls the
+models were trained on.
+
+This report asks a direct question: does a neural network trained to detect falls on healthy
+subjects (SisFall) transfer, without retraining, to the detection of FoG in patients (Daphnet)? The
+experiment is easy to set up and easy to misread. File-level fall labels that include walking, a
+waist sensor compared against an ankle sensor, an interpolated target domain or a different training
+regime for each model would all mix confounders that have nothing to do with Parkinson's disease into
+the population and task differences under study. A negative result obtained under such conditions
+says little about \emph{why} transfer fails, so the protocol is designed to exclude them.
+
+\section{Problem statement}
+
+We study zero-shot transfer from simulated falls in healthy people to freezing of gait in
+Parkinson's disease, with a single trunk-worn accelerometer, under conditions designed so that the
+only differences between the domains are the population and the event. Within that setting we ask:
+\begin{enumerate}
+  \item[\textbf{RQ1}] Under identical training conditions, how do a CNN-1D, an LSTM, a GRU and a patch
+  Transformer compare on subject-independent fall detection?
+  \item[\textbf{RQ2}] Do these fall detectors rank FoG windows above normal Parkinsonian walking, with no
+  patient labels at all?
+  \item[\textbf{RQ3}] How much of the transfer gap is covariate shift that label-free normalisation could
+  remove, and how much is concept shift?
+  \item[\textbf{RQ4}] When a few patients are labelled, does fall pre-training help?
+\end{enumerate}
+
+\section{Contributions}
+
+\begin{itemize}
+  \item A \textbf{controlled transfer protocol} between SisFall and Daphnet: matched sensor site, units and
+  sampling rate; an anatomical frame identified from the data; impact-centred fall labels; removal of
+  sensor dropouts that would otherwise count as walking; and identical training conditions
+  (seeds, mini-batch order, augmentation draws, loss, optimiser, tuning budget) for four architectures.
+  \item A \textbf{negative result with a diagnosis}. All four models reach an AUROC of 0.988--0.999 on unseen
+  SisFall subjects. On Daphnet they reach 0.49--0.63 and almost never fire at their validated
+  threshold, while false alarms on walking rise 15- to 18-fold. A hand-crafted freeze index ranks FoG
+  better than any of them without training.
+  \item A \textbf{decomposition of the shift}. Re-normalising the target inputs changes AUROC by at most
+  $\pm0.13$, with no consistent gain. A linear probe still separates healthy and Parkinsonian movement
+  in every learned representation, and the direction that encodes ``fall'' is nearly orthogonal to the
+  one that would encode ``freeze''. Fine-tuning from fall weights is worse than training from scratch
+  in six of eight comparisons, and in all four at the larger label budget.
+  \item A \textbf{reproducible pipeline}: executed notebooks, checkpoints that store their own scaler and
+  threshold, every table generated from result files, and a one-click GPU run.
+\end{itemize}
+
+The remainder of the report is organised as follows. \Cref{ch:related} reviews fall and FoG
+detection, sequence architectures and the theory of dataset shift. \Cref{ch:method} formalises the
+problem and the protocol. \Cref{ch:setup} describes the data and the exploratory analysis.
+\Cref{ch:results} presents the experiments, and \Cref{ch:conclusion} concludes.

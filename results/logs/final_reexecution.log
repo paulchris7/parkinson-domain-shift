@@ -1,0 +1,25 @@
+== 02_exploratory_analysis Sat Oct 10 17:43:33 +00 2026
+[NbConvertApp] Converting notebook 02_exploratory_analysis.ipynb to notebook
+[IPKernelApp] WARNING | Kernel is running over TCP without encryption. All communication (including code and outputs) is sent in plain text and is susceptible to eavesdropping. Use IPC transport or launch with kernel manager-provisioned CurveZMQ keys to enable transport encryption.
+[NbConvertApp] Writing 1392730 bytes to 02_exploratory_analysis.ipynb
+== 03_hyperparameter_search Sat Oct 10 17:44:17 +00 2026
+[NbConvertApp] Converting notebook 03_hyperparameter_search.ipynb to notebook
+[IPKernelApp] WARNING | Kernel is running over TCP without encryption. All communication (including code and outputs) is sent in plain text and is susceptible to eavesdropping. Use IPC transport or launch with kernel manager-provisioned CurveZMQ keys to enable transport encryption.
+[NbConvertApp] Writing 116747 bytes to 03_hyperparameter_search.ipynb
+== 04_training_and_zero_shot Sat Oct 10 17:44:29 +00 2026
+[NbConvertApp] Converting notebook 04_training_and_zero_shot.ipynb to notebook
+[IPKernelApp] WARNING | Kernel is running over TCP without encryption. All communication (including code and outputs) is sent in plain text and is susceptible to eavesdropping. Use IPC transport or launch with kernel manager-provisioned CurveZMQ keys to enable transport encryption.
+[NbConvertApp] Writing 700433 bytes to 04_training_and_zero_shot.ipynb
+== 05_target_adaptation Sat Oct 10 17:49:29 +00 2026
+[NbConvertApp] Converting notebook 05_target_adaptation.ipynb to notebook
+[IPKernelApp] WARNING | Kernel is running over TCP without encryption. All communication (including code and outputs) is sent in plain text and is susceptible to eavesdropping. Use IPC transport or launch with kernel manager-provisioned CurveZMQ keys to enable transport encryption.
+[NbConvertApp] Writing 110708 bytes to 05_target_adaptation.ipynb
+== 06_shift_analysis Sat Oct 10 17:50:17 +00 2026
+[NbConvertApp] Converting notebook 06_shift_analysis.ipynb to notebook
+[IPKernelApp] WARNING | Kernel is running over TCP without encryption. All communication (including code and outputs) is sent in plain text and is susceptible to eavesdropping. Use IPC transport or launch with kernel manager-provisioned CurveZMQ keys to enable transport encryption.
+[NbConvertApp] Writing 548873 bytes to 06_shift_analysis.ipynb
+== 07_paper_assets Sat Oct 10 17:52:26 +00 2026
+[NbConvertApp] Converting notebook 07_paper_assets.ipynb to notebook
+[IPKernelApp] WARNING | Kernel is running over TCP without encryption. All communication (including code and outputs) is sent in plain text and is susceptible to eavesdropping. Use IPC transport or launch with kernel manager-provisioned CurveZMQ keys to enable transport encryption.
+[NbConvertApp] Writing 34001 bytes to 07_paper_assets.ipynb
+ALLDONE Sat Oct 10 17:52:34 +00 2026

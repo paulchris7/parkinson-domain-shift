@@ -1,0 +1,14 @@
+\begin{tabular}{lrl}
+\toprule
+Model & Params & Selected configuration \\
+\midrule
+CNN-1D & 36k & 3 conv blocks (32--64--128), global avg.\ pooling \\
+LSTM & 135k & 2 layers, bidirectional, hidden 64 \\
+GRU & 26k & 2 layers, bidirectional, hidden 32 \\
+Transformer & 70k & 16 patches of 0.125\,s, $d{=}64$, 2 layers, [CLS] \\
+\bottomrule
+\end{tabular}
+
+\vspace{0.6ex}
+\small 2\,s windows of $[a_V, a_{AP}, a_{ML}, |a|]$, robust scaling, weighted BCE, AdamW, 3 seeds,
+equal tuning budget; threshold chosen on SisFall validation ($F_2$).

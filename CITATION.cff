@@ -1,0 +1,33 @@
+cff-version: 1.2.0
+message: "If you use this code or build on this work, please cite the preprint below."
+title: "From Simulated Falls to Freezing of Gait: A Controlled Study of Domain Shift in Wearable Accelerometry"
+type: software
+authors:
+  - family-names: "Aimé"
+    given-names: "Paul Christopher"
+    orcid: "https://orcid.org/0009-0008-5574-1734"
+    affiliation: "ENSA Marrakech, Cadi Ayyad University"
+repository-code: "https://github.com/paulchris7/parkinson-domain-shift"
+license: MIT
+date-released: "2026-06-30"
+keywords:
+  - domain shift
+  - fall detection
+  - freezing of gait
+  - Parkinson's disease
+  - wearable sensors
+  - Transformer
+  - recurrent neural networks
+preferred-citation:
+  type: article
+  status: preprint
+  title: "From Simulated Falls to Freezing of Gait: A Controlled Study of Domain Shift in Wearable Accelerometry"
+  authors:
+    - family-names: "Aimé"
+      given-names: "Paul Christopher"
+      orcid: "https://orcid.org/0009-0008-5574-1734"
+  year: 2026
+  month: 6
+  doi: "10.5281/zenodo.23464664"
+  publisher:
+    name: "Zenodo"

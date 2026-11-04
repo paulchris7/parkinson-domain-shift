@@ -1,0 +1,20 @@
+\begin{tabular}{lcccc}
+\toprule
+ & \multicolumn{2}{c}{SisFall test} & \multicolumn{2}{c}{Daphnet zero-shot} \\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}
+Model & AUROC & false alarms/h & AUROC & FoG recall \\
+\midrule
+CNN-1D & 0.988 & 1.5 & 0.49 & 0.9\% \\
+LSTM & \textbf{0.999} & 0.8 & 0.59 & 0.1\% \\
+GRU & \textbf{0.999} & \textbf{0.7} & \textbf{0.63} & 0.0\% \\
+Transformer & 0.998 & 0.9 & 0.62 & 0.0\% \\
+\midrule
+Freeze index (no training) & -- & -- & \textbf{0.66} & -- \\
+\bottomrule
+\end{tabular}
+
+\vspace{0.8ex}
+Near-perfect fall detectors become \textbf{blind to freezing}: they rank FoG barely above
+chance and stay silent at their validated threshold, while false alarms on Parkinsonian walking rise
+\textbf{15--18$\times$}. Only the Transformer's patient-level 95\% CI excludes chance
+(seed ensemble 0.65 [0.55, 0.73]).

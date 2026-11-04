@@ -1,0 +1,30 @@
+{
+  "CNN-1D": {
+    "dropout": 0.5,
+    "kernel": 7,
+    "lr": 0.003,
+    "width": 32
+  },
+  "LSTM": {
+    "bidirectional": true,
+    "dropout": 0.3,
+    "hidden": 64,
+    "layers": 2,
+    "lr": 0.001
+  },
+  "GRU": {
+    "bidirectional": true,
+    "dropout": 0.1,
+    "hidden": 32,
+    "layers": 2,
+    "lr": 0.003
+  },
+  "Transformer": {
+    "d_model": 64,
+    "dropout": 0.2,
+    "heads": 4,
+    "layers": 2,
+    "lr": 0.003,
+    "patch": 8
+  }
+}

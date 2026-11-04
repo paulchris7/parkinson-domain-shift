@@ -1,0 +1,19 @@
+\begin{table}[ht]
+\centering
+\footnotesize
+\caption{Zero-shot transfer to Daphnet (all 17 recordings, independent domain statistics, SisFall-validated threshold). Positives are FoG windows. Best mean in bold.}
+\label{tab:zeroshot}
+\setlength{\tabcolsep}{4pt}
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{lcccccc}
+\toprule
+Model & AUROC & AUPRC & Recall & Spec. & F$_1$ & FA/h \\
+\midrule
+CNN-1D & 0.491 $\pm$ 0.056 & 0.104 $\pm$ 0.008 & \textbf{0.009 $\pm$ 0.008} & 0.994 $\pm$ 0.003 & \textbf{0.017 $\pm$ 0.015} & 23.3 $\pm$ 12.2 \\
+LSTM & 0.587 $\pm$ 0.032 & 0.124 $\pm$ 0.021 & 0.001 $\pm$ 0.001 & 0.996 $\pm$ 0.000 & 0.001 $\pm$ 0.001 & 13.6 $\pm$ 0.9 \\
+GRU & \textbf{0.631 $\pm$ 0.042} & \textbf{0.143 $\pm$ 0.023} & 0.000 $\pm$ 0.000 & \textbf{0.997 $\pm$ 0.001} & 0.000 $\pm$ 0.000 & \textbf{11.8 $\pm$ 5.1} \\
+Transformer & 0.620 $\pm$ 0.036 & 0.128 $\pm$ 0.009 & 0.000 $\pm$ 0.000 & 0.995 $\pm$ 0.002 & 0.000 $\pm$ 0.001 & 17.1 $\pm$ 7.8 \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\end{table}

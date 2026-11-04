@@ -1,0 +1,10 @@
+\begin{enumerate}
+  \item In-domain accuracy (AUROC $\approx$ 0.99 for every model) says nothing about transfer, and
+        source validation cannot rank models by transferability.
+  \item With matched sensors and impact-centred labels, the detectors are specific to impacts, not to
+        ``abnormal movement'': they stay silent on freezing.
+  \item The gap is a change of event, not only of population: physics-based features or
+        event-agnostic self-supervised pre-training are better starting points than fall labels.
+  \item With 6 labelled patients a trunk sensor reaches AUROC $\approx$ 0.78 (CNN-1D, Transformer,
+        GRU), the realistic ceiling for this setting.
+\end{enumerate}

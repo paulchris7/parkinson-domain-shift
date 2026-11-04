@@ -1,0 +1,5 @@
+,negatives,positives,subjects,positive %,domain
+train,44705,4877,25,9.84,SisFall
+val,8738,229,5,2.55,SisFall
+test,14173,381,8,2.62,SisFall
+target,15676,1734,10,9.96,Daphnet

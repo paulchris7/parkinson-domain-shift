@@ -1,0 +1,65 @@
+\chapter{Related Work}
+\label{ch:related}
+
+\section{Wearable fall detection and the simulated-fall problem}
+
+Most public fall datasets are recorded with young volunteers who throw themselves onto mattresses
+while wearing an inertial sensor \parencite{casilari2017datasets}. SisFall \parencite{sucerquia2017sisfall} is one of the
+largest: 38 participants, 19 activities of daily living (ADL) and 15 fall types, recorded at the
+waist at \SI{200}{\hertz}. Its annotation is per file, so studies that need event-level labels either
+re-annotate it \parencite{musci2021online} or, as in the project this report revisits, assign the file label
+to every window. The gap between laboratory and real falls is documented: thresholds and classifiers
+tuned on simulated falls lose much of their sensitivity on the few real-world falls that have been
+recorded \parencite{bagala2012realfalls,broadley2018realworld}. That literature is about the \emph{same} event
+seen in a different population. The question here is harder: the event itself changes.
+
+\section{Freezing of gait detection}
+
+Freezing of gait (FoG) is a brief, episodic inability to produce effective stepping despite the
+intention to walk \parencite{nutt2011fog}. It is common in advanced Parkinson's disease and strongly linked to
+falls \parencite{bloem2021parkinson,allen2013falls}. The Daphnet dataset \parencite{bachlin2010daphnet} contains ten patients
+wearing three accelerometers (ankle, thigh, lower back) during walking protocols designed to provoke
+freezing, with video-based annotations. The classic detector is the \emph{freeze index} of
+\textcite{moore2008freeze}: the ratio of power in the 3--8\,Hz ``freeze'' band to power in the 0.5--3\,Hz
+locomotion band, usually computed at the shank. Deep models have since been trained directly on
+the raw signals, including from a single waist-worn sensor \parencite{camps2018waist}; \textcite{pardoel2019review}
+review the field. All of these approaches are trained on FoG labels. We ask what happens when none
+are available.
+
+\section{Deep architectures for inertial time series}
+
+One-dimensional CNNs and recurrent networks are the standard baselines for activity recognition
+from wearables \parencite{ordonez2016deepconvlstm,wang2019survey,fawaz2019tsc}. LSTMs \parencite{hochreiter1997lstm} and
+GRUs \parencite{cho2014gru} model temporal dependencies through gated recurrence; CNNs build
+translation-equivariant local detectors. Transformers \parencite{vaswani2017attention} have more recently been
+adapted to time series by grouping consecutive samples into patches that act as tokens, which
+shortens the sequence and gives each token a local receptive field \parencite{nie2023patchtst,zerveas2021tst}. Whether
+attention-based models generalise better under distribution shift than recurrent ones is an open
+empirical question for small biomedical datasets; we treat it as one.
+
+\section{Dataset shift and domain adaptation}
+
+Dataset shift covers any difference between the training and deployment joint distributions
+\parencite{quionero2009shift,morenotorres2012shift}. It is useful to separate \emph{covariate shift} ($p(x)$ changes,
+$p(y\mid x)$ does not), \emph{label shift} ($p(y)$ changes; \cite{lipton2018labelshift}) and \emph{concept shift}
+($p(y\mid x)$ changes). Domain-adaptation theory bounds target error by source error plus a
+divergence between domains plus the error of the best joint hypothesis \parencite{bendavid2010theory}; the
+last term is the one that concept shift inflates and that no unsupervised alignment can reduce.
+Practical tools include kernel two-sample tests such as MMD \parencite{gretton2012mmd}, adversarial
+feature alignment \parencite{ganin2016dann,wilson2020codats}, and cheap normalisation-based adaptation such as
+re-estimating batch-norm or input statistics on target data \parencite{li2017adabn,kim2022revin}. Domain
+generalisation benchmarks have shown that careful empirical risk minimisation is hard to beat and
+that model selection must not use target labels unless reported as an oracle
+\parencite{gulrajani2021domainbed}; we follow that convention. Self-supervised pre-training is another route
+to transferable time-series features \parencite{eldele2021tstcc}, which we leave for future work.
+
+\section{Positioning}
+
+Studies that move a detector from one population or task to another usually report the drop in
+accuracy without separating its causes. A transfer experiment between SisFall and Daphnet is
+particularly easy to confound: file-level fall labels, a waist sensor compared against an ankle
+sensor, an upsampled target domain or a different training regime per model would each change the
+outcome for reasons unrelated to Parkinson's disease. The present study removes these confounders
+by construction, compares recurrent, convolutional and attention-based models under identical
+conditions, and measures which part of the failure comes from the input statistics and which from
+the task itself.

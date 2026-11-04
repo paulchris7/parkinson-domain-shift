@@ -1,0 +1,191 @@
+% Gemini theme
+% https://github.com/anishathalye/gemini
+% Headline adapted to carry the ENSA Marrakech and Cadi Ayyad University logos.
+
+% ====================
+% Dependencies
+% ====================
+
+\RequirePackage{exscale}
+\RequirePackage{ragged2e}
+\RequirePackage{changepage}
+\RequirePackage{fontspec}
+\RequirePackage{tikz}
+
+% ====================
+% Fonts
+% ====================
+
+\newfontfamily\Raleway{Raleway}[Ligatures=TeX]
+\newfontfamily\LatoLight[
+  Ligatures=TeX,
+  UprightFont=*-Light,
+  ItalicFont=*-LightItalic,
+  BoldFont=*-Regular,
+  BoldItalicFont=*-Italic
+]{Lato}
+\newfontfamily\Lato{Lato}[Ligatures=TeX]
+
+\usefonttheme{professionalfonts}
+
+\setsansfont{Lato}[
+  Ligatures=TeX,
+  UprightFont=*-Light,
+  ItalicFont=*-LightItalic,
+  BoldFont=*-Regular,
+  BoldItalicFont=*-Italic
+]
+
+\setbeamerfont{headline}{family=\Raleway}
+\setbeamerfont{headline title}{size=\Huge,series=\bfseries}
+\setbeamerfont{headline author}{size=\Large}
+\setbeamerfont{headline institute}{size=\normalsize}
+\setbeamerfont{block title}{family=\Raleway,size=\large,series=\bfseries}
+\setbeamerfont{block body}{family=\LatoLight}
+\setbeamerfont{heading}{family=\Lato,series=\bfseries}
+\setbeamerfont{caption}{size=\small}
+
+% ====================
+% Macros
+% ====================
+
+\newcommand{\samelineand}{\qquad}
+
+% ====================
+% Elements
+% ====================
+
+% List
+\makeatletter
+\def\@listi{\leftmargin\leftmargini
+\topsep 1ex % spacing before
+\parsep 0\p@ \@plus\p@
+\itemsep 0.5ex} % spacing between
+\makeatother
+
+% Itemize
+
+\setbeamertemplate{itemize item}{\raise0.5ex \hbox{\vrule width 0.5ex height 0.5ex}}
+\setbeamertemplate{itemize subitem}{\raise0.3ex \hbox{\vrule width 0.5ex height 0.5ex}}
+\setbeamertemplate{itemize subsubitem}{\raise0.2ex \hbox{\vrule width 0.5ex height 0.5ex}}
+
+% Enumerate
+
+\setbeamertemplate{enumerate item}{\insertenumlabel.}
+\setbeamertemplate{enumerate subitem}{\insertsubenumlabel.}
+\setbeamertemplate{enumerate subsubitem}{\insertsubsubenumlabel.}
+
+% Equation
+\setlength\belowdisplayshortskip{2ex}
+
+% Caption
+\usecaptiontemplate{\usebeamerfont{caption}\structure{\insertcaptionname~\insertcaptionnumber: }\insertcaption}
+\setlength{\abovecaptionskip}{2ex}
+\setlength{\belowcaptionskip}{1ex}
+
+% Bibliography
+\setbeamertemplate{bibliography item}[text]
+
+% Navigation
+\beamertemplatenavigationsymbolsempty
+
+% ====================
+% Components
+% ====================
+
+% Heading
+\newcommand\heading[1]
+{%
+  \par\bigskip
+  {\usebeamerfont{heading}\usebeamercolor[fg]{heading}#1}\par\smallskip
+}
+
+% Headline
+\setbeamertemplate{headline}
+{
+  \begin{beamercolorbox}{headline}
+    \begin{columns}
+      \begin{column}{\paperwidth}
+        \usebeamerfont{headline}
+        \vskip3ex
+        \centering
+        {\usebeamerfont{headline title}\usebeamercolor[fg]{headline title}\parbox{0.74\paperwidth}{\centering\inserttitle}\\[0.5ex]}
+        {\usebeamerfont{headline author}\usebeamercolor[fg]{headline author}\insertauthor\\[1ex]}
+        {\usebeamerfont{headline institute}\usebeamercolor[fg]{headline institute}\insertinstitute\\[1ex]}
+      \end{column}
+    \end{columns}
+    \vspace{5ex}
+    \ifbeamercolorempty[bg]{headline rule}{}{
+      \begin{beamercolorbox}[wd=\paperwidth,colsep=0.5ex]{headline rule}\end{beamercolorbox}
+    }
+  \end{beamercolorbox}
+  \begin{tikzpicture}[remember picture,overlay]
+    \node [anchor=north west, inner sep=2.2cm] at ([xshift=0.6cm,yshift=1.4cm]current page.north west)
+      {\includegraphics[height=6.2cm]{../figures/ensa_logo.png}};
+    \node [anchor=north east, inner sep=2.2cm] at ([xshift=-0.6cm,yshift=1.6cm]current page.north east)
+      {\includegraphics[height=7.2cm]{../figures/uca_logo.png}};
+  \end{tikzpicture}
+}
+
+% Block
+\setbeamertemplate{block begin}
+{
+  \begin{beamercolorbox}[colsep*=0ex,dp=2ex,center]{block title}
+    \vskip0pt
+    \usebeamerfont{block title}\insertblocktitle
+    \vskip-1.25ex
+    \begin{beamercolorbox}[colsep=0.025ex]{block separator}\end{beamercolorbox}
+  \end{beamercolorbox}
+  {\parskip0pt\par}
+  \usebeamerfont{block body}
+  \vskip-0.5ex
+  \begin{beamercolorbox}[colsep*=0ex,vmode]{block body}
+  \justifying
+  \setlength{\parskip}{1ex}
+  \vskip-1ex
+}
+\setbeamertemplate{block end}
+{
+  \end{beamercolorbox}
+  \vskip0pt
+  \vspace*{2ex}
+}
+
+% Alert Block
+\setbeamertemplate{block alerted begin}
+{
+  \begin{beamercolorbox}[colsep*=0ex,dp=2ex,center]{block alerted title}
+    \vskip0.5ex
+    \usebeamerfont{block title}\insertblocktitle
+    \vskip-1.25ex
+    \begin{beamercolorbox}[colsep=0.025ex]{block alerted separator}\end{beamercolorbox}
+  \end{beamercolorbox}
+  {\parskip0pt\par}
+  \usebeamerfont{block body}
+  \vskip-0.5ex
+  \begin{beamercolorbox}[colsep*=0ex,vmode]{block alerted body}
+  \justifying
+  \begin{adjustwidth}{1ex}{1ex}
+  \setlength{\parskip}{1ex}
+  \vskip-1ex
+}
+\setbeamertemplate{block alerted end}
+{
+  \end{adjustwidth}
+  \vskip1ex
+  \end{beamercolorbox}
+  \vskip0pt
+  \vspace*{2ex}
+}
+
+% Footer (later Gemini releases)
+\newcommand{\footercontent}[1]{\def\insertfootercontent{#1}}
+\def\insertfootercontent{}
+\setbeamertemplate{footline}
+{
+  \begin{beamercolorbox}[wd=\paperwidth,colsep=0.5ex]{footer rule}\end{beamercolorbox}
+  \begin{beamercolorbox}[wd=\paperwidth,ht=3.5ex,dp=1.5ex,leftskip=2.5cm,rightskip=2.5cm]{footline}
+    \usebeamerfont{footline}\insertfootercontent
+  \end{beamercolorbox}
+}
+\setbeamerfont{footline}{family=\Lato,size=\normalsize}
